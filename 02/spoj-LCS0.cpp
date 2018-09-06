@@ -16,37 +16,30 @@ int main() {
     reverse(a_char_pos[i].begin(), a_char_pos[i].end());
 
   vector<int> seq;
-  for (const char c : b)
-    for (const int index : a_char_pos[c - 'a']) {
-      seq.push_back(index);
-      // cout << index << " ";
-    }
-  // cout << endl;
+  for (int i = 0; i < m; i++) {
+    const char c = b[i];
+    for (const int index : a_char_pos[c - 'a']) seq.push_back(index);
+  }
 
   const int len = seq.size();
-  int lis[len];
-  int ans = 0;
+  vector<int> aux;
+  aux.push_back(-1);
   for (int i = 0; i < len; i++) {
-    lis[i] = 1;
-    for (int j = 0; j < i; j++)
-      if (seq[i] > seq[j]) lis[i] = max(lis[i], lis[j] + 1);
-    ans = max(ans, lis[i]);
+    int lis = 1;
+    int l = 1, r = aux.size() - 1;
+    while (l <= r) {
+      int m = (l + r) / 2;
+      if (aux[m] <= seq[i])
+        l = m + 1;
+      else
+        r = m - 1;
+    }
+    lis = l;
+    if (lis == aux.size())
+      aux.push_back(seq[i]);
+    else
+      aux[lis] = min(aux[lis], seq[i]);
   }
-  cout << ans << endl;
 
-  // const int len = seq.size();
-  // vector<int> aux;
-  // aux.push_back(-1);
-  // for (int i = 0; i < len; i++) {
-  // int lis = 1;
-  // auto lb = lower_bound(aux.begin(), aux.end(), seq[i] - 1);
-  // if (lb != aux.end()) lis = lb - aux.begin() + 1;
-  // cout << lis << endl;
-  // if (lis == aux.size())
-  // aux.push_back(seq[i]);
-  // else
-  // aux[lis] = min(aux[lis], seq[i]);
-  //}
-
-  // cout << aux.size() << endl;
+  cout << aux.size() - 1 << endl;
 }
