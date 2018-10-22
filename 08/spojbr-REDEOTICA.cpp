@@ -12,7 +12,7 @@ int merge(const int source, const int target, vector<int>& dsu,
           vector<int>& sz) {
   const int source_root = find(source, dsu);
   const int target_root = find(target, dsu);
-  if (sz[source_root] > sz[target_root]) {
+  if (sz[source_root] < sz[target_root]) {
     sz[target_root] += sz[source_root];
     dsu[source_root] = dsu[target_root];
   } else {
